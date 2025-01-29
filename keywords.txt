@@ -1,0 +1,46 @@
+#######################################
+# Syntax Coloring Map for BarcodeGFX
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+BarcodeGFX				KEYWORD1
+BarcodeType				KEYWORD1
+BarcodeChecker			KEYWORD1
+BarcodeHelper			KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+draw					KEYWORD2
+setScale				KEYWORD2
+getScale				KEYWORD2
+setShowDigits			KEYWORD2
+getShowDigits			KEYWORD2
+setColors				KEYWORD2
+getColors				KEYWORD2
+setBackgroundColor		KEYWORD2
+getBackgroundColor		KEYWORD2
+setBarColor				KEYWORD2
+getBarColor				KEYWORD2
+setPadWithLeadingZeros	KEYWORD2
+getPadWithLeadingZeros	KEYWORD2
+getWidth				KEYWORD2
+isValid					KEYWORD2
+detectType				KEYWORD2
+getNumberOfDigits		KEYWORD2
+padWithLeadingZeros		KEYWORD2
+uint64ToStr				KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+Unknown	LITERAL1
+EAN13	LITERAL1
+EAN8	LITERAL1
+UPCA	LITERAL1
+UPCE	LITERAL1
