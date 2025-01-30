@@ -122,19 +122,19 @@ uint16_t BarcodeChecker::getNumberOfDigits(BarcodeType type) {
 // padWithLeadingZeros methods
 /////////////////////////////////////////////////
 
-static String BarcodeChecker::padWithLeadingZeros(const String &barcodeText, BarcodeType type) {
+String BarcodeChecker::padWithLeadingZeros(const String &barcodeText, BarcodeType type) {
   char newBarcodeText[MAX_BARCODE_LENGTH + 1];
   padWithLeadingZeros(newBarcodeText, barcodeText.c_str(), type);
   return String(newBarcodeText);
 }
 
-static String BarcodeChecker::padWithLeadingZeros(uint64_t barcodeNumber, BarcodeType type) {
+String BarcodeChecker::padWithLeadingZeros(uint64_t barcodeNumber, BarcodeType type) {
   char newBarcodeText[MAX_BARCODE_LENGTH + 1];
   padWithLeadingZeros(newBarcodeText, barcodeNumber, type);
   return String(newBarcodeText);
 }
 
-static void BarcodeChecker::padWithLeadingZeros(char *newBarcodeText, uint64_t barcodeNumber, BarcodeType type) {
+void BarcodeChecker::padWithLeadingZeros(char *newBarcodeText, uint64_t barcodeNumber, BarcodeType type) {
   char barcodeText[MAX_BARCODE_LENGTH + 1];
   BarcodeHelper::uint64ToStr(barcodeNumber, barcodeText);
   padWithLeadingZeros(newBarcodeText, barcodeText, type);
