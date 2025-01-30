@@ -39,7 +39,7 @@ void setup() {
   int y = deltaY;
   int x = (display.width() - barcode.getWidth(BarcodeType::UPCA))/2;
 
-  // Draw sample codes
+  // Draw sample barcodes
   for (int i = 0; i < numberOfSamples; i++) {
     barcode.setColors(samples[i].backgroundColor, samples[i].barColor);
 
