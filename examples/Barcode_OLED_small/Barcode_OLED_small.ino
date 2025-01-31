@@ -25,9 +25,12 @@ void setup() {
 
   display.clearDisplay();
 
-  barcode.setShowDigits(false).setScale(2);
+  // setBackgroundColor is important here
+  // WHITE = 0x01, default = 0xFF
+  // passing color value 0xFF to Adafruit_SSD1306 causes weird bugs sometimes
+  barcode.setBackgroundColor(WHITE).setShowDigits(false).setScale(2);
 
-  bool success = barcode.draw("01234565", 0, 0, 64);
+  bool success = barcode.draw("01234565", 3, 0, 64);
   if (!success) {
     Serial.println("Invalid barcode!");
   }
