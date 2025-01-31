@@ -122,7 +122,7 @@ if (type == BarcodeType::EAN13) {
   // It's an EAN-13 barcode
 }
 
-// Validate specific type without 
+// Validate specific type 
 if (BarcodeChecker::isValid("01234565", BarcodeType::EAN8)) {
   // Valid EAN-8 code
 }
