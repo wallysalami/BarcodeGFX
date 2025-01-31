@@ -2,25 +2,37 @@
 
 BarcodeGFX is an Arduino library for drawing barcode labels on displays. It is designed to be display-agnostic and works with any library that inherits from Adafruit_GFX.
 
+![Image](https://github.com/user-attachments/assets/a41831ba-21a0-415d-a249-0d6c5ac12af6)
+*Example of barcodes drawn on different displays*
+
 ## Features
-- Compatibility with any Adafruit_GFX display library, such as:
-  - Adafruit_SSD1306 (monochrome OLED)
-  - Adafruit_ILI9341 (TFT LCD SPI)
-  - MCUFRIEND_kbv (TFT LCD)
-  - GxEPD2 (E-Paper)
-  - etc.
-- Support for the following barcode types:
+- Support for multiple barcode formats:
   - EAN-13
   - EAN-8
   - UPC-A
   - UPC-E
-- Automatic barcode type detection
-- Checksum validation
-- Configurable scale and colors
-- Optional numerical digits display
-- Leading zeros auto-padding
+- Works with any display compatible with Adafruit_GFX library:
+  - Adafruit_SSD1306 (monochrome OLED)
+  - Adafruit_ILI9341 (TFT LCD SPI)
+  - MCUFRIEND_kbv (TFT LCD)
+  - GxEPD2 (E-Paper)
+  - And many others
+- Smart barcode handling:
+  - Automatic type detection
+  - Checksum validation
+  - Leading zeros auto-padding
+- Customizable appearance:
+  - Adjustable scale (size)
+  - Configurable colors
+  - Optional numerical digits display
 
 ## Installation
+
+1. In the Arduino IDE, go to Sketch -> Include Library -> Manage Libraries...
+2. Search for BarcodeGFX
+3. Click Install
+
+Or if you want to do it manually:
 
 1. Download the ZIP file of this repository
 2. In the Arduino IDE, go to Sketch -> Include Library -> Add .ZIP Library
@@ -46,9 +58,11 @@ void setup() {
   display.fillScreen(TFT_BLACK);
   
   // Draw a small black and white barcode
-  // Parameters: digits, x, y, height
-  // Width is automatically defined by barcode type and scale (see next example)
-  // This call automatically detects the barcode type (EAN-13 in this case)
+  // Parameters:
+  //   barcode: number or text with digits
+  //   x: horizontal position (upper left corner)
+  //   y: vertical position (upper left corner)
+  //   height: desired height in pixels (width is calculated automatically)
   barcode.draw("5000159344074", 0, 0, 70);
 }
 
@@ -61,7 +75,7 @@ void loop() {
 // Configure appearance using method chaining
 barcode.setScale(2) // from 1 to 20
        .setShowDigits(false)
-       .setColors(TFT_YELLOW, TFT_BLUE)
+       .setColors(TFT_YELLOW, TFT_BLUE) // background, bars
        .setPadWithLeadingZeros(false);
 
 // Force UPC-A format and check the result
@@ -92,9 +106,9 @@ barcode.draw(ean13Example, x, 0, 100);
 
 Barcode digits are always validated before drawing, but you can do it manually too.
 
-By the way, you can pass the digits as 64-bit integers, char* or String in all methods. But text is better to store leading zeros (e.g., "**0**1234565").
+By the way, you can pass the digits as 64-bit integers, `char*` or `String` in all methods. But text is better to store leading zeros (e.g., "**0**1234565").
 
-Friendly reminder: don't put leading zeros on integer variables! C/C++ will see them as octal base instead of decimal base (e.g., `int x = 01234;` gets converted to 668).
+Friendly reminder: don't put leading zeros on integer variables! C/C++ will see them as octal base instead of decimal base (e.g., `int x = 01234;` gets converted to `668`).
 
 ```cpp
 // Using static validation methods
@@ -120,7 +134,7 @@ String ean13Barcode = BarcodeChecker::padWithLeadingZeros(34000403622, BarcodeTy
 
 ```
 
-Check more examples in the `examples` folder.
+Check out more examples in the `examples` folder.
 
 ## Contributing
 
