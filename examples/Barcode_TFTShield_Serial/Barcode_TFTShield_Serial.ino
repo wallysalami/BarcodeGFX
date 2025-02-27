@@ -8,9 +8,6 @@ BarcodeGFX barcode(display);
 void setup() {
   Serial.begin(9600);
 
-  int x = 01234;
-  Serial.println(x);
-
   // Initialize the display
   display.begin(display.readID());
   display.fillScreen(TFT_BLACK);
@@ -28,15 +25,15 @@ void setup() {
 void loop() {
   // Draw a big barcode label if user sends a barcode via Serial
   if (Serial.available()) {
+    // Get text sent by user
     String text = Serial.readStringUntil('\n');
     Serial.println(text);
 
+    // Erase previous barcode
     display.fillScreen(TFT_BLACK);
     
-    barcode.setScale(3)
-           .setColors(TFT_WHITE, TFT_BLACK);
-
     // Center the barcode in landscape
+    barcode.setScale(3);
     int width = barcode.getWidth(text);
     int height = 150;
     int x = (display.width() - width) / 2;
