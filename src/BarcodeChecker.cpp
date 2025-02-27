@@ -116,6 +116,8 @@ uint16_t BarcodeChecker::getNumberOfDigits(BarcodeType type) {
     case BarcodeType::Unknown:
       return 0;
   }
+
+  return 0; // Avoid -Wreturn-type warning
 }
 
 /////////////////////////////////////////////////
