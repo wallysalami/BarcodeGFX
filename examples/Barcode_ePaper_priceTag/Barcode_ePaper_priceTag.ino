@@ -1,3 +1,29 @@
+/*************************************************
+
+Copyright © 2025 Jan K. S.
+MIT License
+https://github.com/wallysalami/BarcodeGFX
+
+This example simulates a price tag with a Barcode.
+It combines the QR Code with other drawing methods from Adafruit_GFX.
+
+This program was tested on a ESP32 S3 with a WeAct 2.9'' Black-White E-Paper Display.
+It should work with Waveshare E-Paper Display as well.
+That display uses the SPI protocol to receive drawing commands.
+The SPI pins changes from microcontroller to microcontroller.
+Here are some examples:
+
+Microcontroller | SDA (MOSI) pin | SCL (SCK) pin  
+--------------------------------------------------
+Arduino Uno     |       12       |       13       
+Arduino Mega    |       51       |       52       
+ESP32           |       23       |       18       
+ESP32 S3        |       11       |       12       
+
+You must also install the GxEPD2 library to compile it!
+
+*************************************************/
+
 #include <GxEPD2_BW.h>
 #include <BarcodeGFX.h>
 

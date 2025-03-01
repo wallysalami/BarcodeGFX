@@ -1,3 +1,18 @@
+/*************************************************
+
+Copyright © 2025 Jan K. S.
+MIT License
+https://github.com/wallysalami/BarcodeGFX
+
+This example will draw different Barcodes from an array of configurations.
+It shows many of the customization options of the library.
+
+This program was tested on a Arduino Uno with a TFT Shield.
+
+You must also install the MCUFRIEND_kbv library to compile it!
+
+*************************************************/
+
 #include <MCUFRIEND_kbv.h>
 #include <BarcodeGFX.h>
 

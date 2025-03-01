@@ -1,3 +1,19 @@
+/*************************************************
+
+Copyright © 2025 Jan K. S.
+MIT License
+https://github.com/wallysalami/BarcodeGFX
+
+This example will ask the user to input some text on Serial Monitor.
+Then it will draw a Barcode for that text at the center of the screen.
+It's an good example of Barcode generation from an arbitrary text.
+
+This program was tested on a Arduino Uno / Mega with a TFT Shield.
+
+You must also install the MCUFRIEND_kbv library to compile it!
+
+*************************************************/
+
 #include <MCUFRIEND_kbv.h>
 #include <BarcodeGFX.h>
 

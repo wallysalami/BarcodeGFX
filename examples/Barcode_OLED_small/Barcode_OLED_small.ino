@@ -1,3 +1,20 @@
+/*************************************************
+
+Copyright © 2025 Jan K. S.
+MIT License
+https://github.com/wallysalami/BarcodeGFX
+
+This example will keep drawing a Barcode on a small screen.
+To keep the Barcode compact, it will not show the digits.
+
+This program was tested on a LilyGo TTGO Meshtastic 1.2 ESP32 LoRa.
+It has a embedded SSD1306 0.96’’ monochrome OLED display.
+Adjust the pin numbers if you are using a different device / wiring.
+
+You must also install the Adafruit_SSD1306 library to compile it!
+
+*************************************************/
+
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include <BarcodeGFX.h>

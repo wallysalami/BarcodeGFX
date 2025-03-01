@@ -1,3 +1,11 @@
+/*************************************************
+
+Copyright © 2025 Jan K. S.
+MIT License
+https://github.com/wallysalami/BarcodeGFX
+
+*************************************************/
+
 #include "BarcodeGFX.h"
 
 // EAN-13 encoding patterns for digits 0-9

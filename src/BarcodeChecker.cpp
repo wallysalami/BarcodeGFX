@@ -1,3 +1,11 @@
+/*************************************************
+
+Copyright © 2025 Jan K. S.
+MIT License
+https://github.com/wallysalami/BarcodeGFX
+
+*************************************************/
+
 #include "BarcodeChecker.h"
 
 static constexpr int MAX_BARCODE_LENGTH = 20;  // max digits in a 64 bit number

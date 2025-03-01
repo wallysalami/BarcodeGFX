@@ -1,3 +1,11 @@
+/*************************************************
+
+Copyright © 2025 Jan K. S.
+MIT License
+https://github.com/wallysalami/BarcodeGFX
+
+*************************************************/
+
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
 #include "BarcodeChecker.h"
