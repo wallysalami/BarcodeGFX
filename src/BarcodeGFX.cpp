@@ -8,30 +8,27 @@ https://github.com/wallysalami/BarcodeGFX
 
 #include "BarcodeGFX.h"
 
+#define getBit(value, bit) ((value >> bit) & 1)
+
 // EAN-13 encoding patterns for digits 0-9
-static constexpr char EAN_L[10][8] = {
-  "0001101", "0011001", "0010011", "0111101", "0100011", "0110001", "0101111", "0111011", "0110111", "0001011"
+static constexpr byte EAN_L[10] = {
+  0b0001101, 0b0011001, 0b0010011, 0b0111101, 0b0100011, 0b0110001, 0b0101111, 0b0111011, 0b0110111, 0b0001011
 };
 
-static constexpr char EAN_G[10][8]= {
-  "0100111", "0110011", "0011011", "0100001", "0011101", "0111001", "0000101", "0010001", "0001001", "0010111"
-};
-
-static constexpr char EAN_R[10][8] = {
-  "1110010", "1100110", "1101100", "1000010", "1011100", "1001110", "1010000", "1000100", "1001000", "1110100"
+static constexpr byte EAN_G[10]= {
+  0b0100111, 0b0110011, 0b0011011, 0b0100001, 0b0011101, 0b0111001, 0b0000101, 0b0010001, 0b0001001, 0b0010111
 };
 
 // EAN-13 Encoding pattern according to the first digit (determines the L and G combination for the left side)
-static constexpr char EAN13_PATTERN[10][8] = {
-  "LLLLLL", "LLGLGG", "LLGGLG", "LLGGGL", "LGLLGG", "LGGLLG", "LGGGLL", "LGLGLG", "LGLGGL", "LGGLGL"
+// L = 0, G = 1
+static constexpr byte EAN13_PATTERN[10] = {
+  0b000000, 0b001011, 0b001101, 0b001110, 0b010011, 0b011001, 0b011100, 0b010101, 0b010110, 0b011010
 };
 
-static constexpr char UPCE_ZERO_PATTERN[10][7] = {
-  "GGGLLL", "GGLGLL", "GGLLGL", "GGLLLG", "GLGGLL", "GLLGGL", "GLLLGG", "GLGLGL", "GLGLLG", "GLLGLG"
-};
-
-static constexpr char UPCE_ONE_PATTERN[10][7] = {
-  "LLLGGG", "LLGLGG", "LLGGLG", "LLGGGL", "LGLLGG", "LGGLLG", "LGGGLL", "LGLGLG", "LGLGGL", "LGGLGL"
+// UPC-E encoding pattern according to the first and last digit
+// O = 0, E = 1
+static constexpr byte UPCE_ZERO_PATTERN[10] = {
+  0b111000, 0b110100, 0b110010, 0b110001, 0b101100, 0b100110, 0b100011, 0b101010, 0b101001, 0b100101 
 };
 
 static constexpr int PADDING = 5;
@@ -123,13 +120,13 @@ bool BarcodeGFX::draw(const char *codeText, int16_t x, int16_t y, uint16_t heigh
   }
 
   // Draw start guard pattern
-  drawPattern("101", currentX, y, longBarHeight);
+  drawPattern(0b101, 3, currentX, y, longBarHeight);
   currentX += 3 * scale;
 
   // UPC-A draws long bars for first digit after start guard
   int firstDigit = codeText[0] - '0';
   if (barcodeType == BarcodeType::UPCA) {
-    drawPattern(EAN_L[firstDigit], currentX, y, longBarHeight);
+    drawPattern(EAN_L[firstDigit], 7, currentX, y, longBarHeight);
     currentX += 7 * scale;
   }
 
@@ -137,10 +134,10 @@ bool BarcodeGFX::draw(const char *codeText, int16_t x, int16_t y, uint16_t heigh
   for (int i = index1; i < index2; i++) {
     int digit = codeText[i] - '0';
     // EAN-13 uses a L/G pattern according to the first digit
-    const char *digitPattern;
+    byte digitPattern;
     if (barcodeType == BarcodeType::EAN13) {
-      const char *pattern = EAN13_PATTERN[firstDigit];
-      if (pattern[i - 1] == 'G') {
+      byte pattern = EAN13_PATTERN[firstDigit];
+      if (getBit(pattern, 6-i) == 1) {
         digitPattern = EAN_G[digit];
       }
       else {
@@ -150,8 +147,8 @@ bool BarcodeGFX::draw(const char *codeText, int16_t x, int16_t y, uint16_t heigh
     // UPC-E uses a L/G pattern according to the first and the last digit
     else if (barcodeType == BarcodeType::UPCE) {
       int lastDigit = codeText[7] - '0';
-      const char *pattern = (firstDigit == 0) ? UPCE_ZERO_PATTERN[lastDigit] : UPCE_ONE_PATTERN[lastDigit];
-      if (pattern[i - 1] == 'G') {
+      byte pattern = (firstDigit == 0) ? UPCE_ZERO_PATTERN[lastDigit] : ~UPCE_ZERO_PATTERN[lastDigit];
+      if (getBit(pattern, 6 - i) == 1) {
         digitPattern = EAN_G[digit];
       }
       else {
@@ -161,21 +158,21 @@ bool BarcodeGFX::draw(const char *codeText, int16_t x, int16_t y, uint16_t heigh
     else {
       digitPattern = EAN_L[digit];
     }
-    drawPattern(digitPattern, currentX, y, barHeight);
+    drawPattern(digitPattern, 7, currentX, y, barHeight);
     drawDigit(codeText[i], currentX + scale * 1.5, numberY);
     currentX += 7 * scale;
   }
 
   // Draw middle guard pattern
   if (barcodeType != BarcodeType::UPCE) {
-    drawPattern("01010", currentX, y, longBarHeight);
+    drawPattern(0b01010, 5, currentX, y, longBarHeight);
     currentX += 5 * scale;
   }
 
   // Draw right side
   for (int i = index2; i < index3; i++) {
     int digit = codeText[i] - '0';
-    drawPattern(EAN_R[digit], currentX, y, barHeight);
+    drawPattern(~EAN_L[digit], 7, currentX, y, barHeight);
     drawDigit(codeText[i], currentX + scale * 0.5, numberY);
     currentX += 7 * scale;
   }
@@ -183,17 +180,17 @@ bool BarcodeGFX::draw(const char *codeText, int16_t x, int16_t y, uint16_t heigh
   // UPC-A draws long bars for last digit before end guard
   if (barcodeType == BarcodeType::UPCA) {
     int lastDigit = codeText[11] - '0';
-    drawPattern(EAN_R[lastDigit], currentX, y, longBarHeight);
+    drawPattern(~EAN_L[lastDigit], 7, currentX, y, longBarHeight);
     currentX += 7 * scale;
   }
 
   // Draw end guard pattern
   if (barcodeType == BarcodeType::UPCE) {
-    drawPattern("010101", currentX, y, longBarHeight);
+    drawPattern(0b010101, 6, currentX, y, longBarHeight);
     currentX += 6 * scale;
   }
   else {
-    drawPattern("101", currentX, y, longBarHeight);
+    drawPattern(0b101, 3, currentX, y, longBarHeight);
     currentX += 3 * scale;  
   }
   
@@ -323,9 +320,9 @@ uint16_t BarcodeGFX::getWidth(BarcodeType type) const {
 // Private methods
 /////////////////////////////////////////////////
 
-void BarcodeGFX::drawPattern(const char *pattern, int16_t x, int16_t y, int16_t barHeight) const {
-  for (int i = 0; pattern[i] != '\0'; ++i) {
-    if (pattern[i] == '1') {
+void BarcodeGFX::drawPattern(byte pattern, uint8_t size, int16_t x, int16_t y, int16_t barHeight) const {
+  for (int i = 0; i < size; i++) {
+    if (getBit(pattern, size - i - 1) == 1) {
       display.fillRect(x + i * scale, y, scale, barHeight, barColor);
     }
   }

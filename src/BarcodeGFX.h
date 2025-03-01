@@ -57,7 +57,7 @@ private:
   uint16_t barColor = 0x0000;
   bool padWithLeadingZeros = true;
 
-  void drawPattern(const char *pattern, int16_t x, int16_t y, int16_t barHeight) const;
+  void drawPattern(byte pattern, uint8_t size, int16_t x, int16_t y, int16_t barHeight) const;
 
   void getDigitSize(uint16_t& width, uint16_t& height) const;
   uint16_t getDigitWidth() const;
