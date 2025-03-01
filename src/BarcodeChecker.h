@@ -42,6 +42,7 @@ private:
   static void padWithLeadingZeros(char *newBarcodeText, const char *barcodeText, int finalLength);
 
   static bool validateChecksum(const char *barcodeText, BarcodeType type);
+  static void expandToUPCA(const char* upce, char* upcaBuffer);
 };
 
 

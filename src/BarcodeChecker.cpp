@@ -102,6 +102,9 @@ BarcodeType BarcodeChecker::detectType(const char *barcodeText, bool _padWithLea
   if (validateChecksum(barcodeText, possibleType)) {
     return possibleType;
   }
+  else if (possibleType == BarcodeType::UPCE && validateChecksum(barcodeText, BarcodeType::EAN8)) {
+    return BarcodeType::EAN8;
+  }
   else {
     return BarcodeType::Unknown;
   }
@@ -187,6 +190,11 @@ void BarcodeChecker::padWithLeadingZeros(char *newBarcodeText, const char *barco
 /////////////////////////////////////////////////
 
 bool BarcodeChecker::validateChecksum(const char *barcodeText, BarcodeType type) {
+  if (type == BarcodeType::UPCE) {
+    char upcaBuffer[13];
+    expandToUPCA(barcodeText, upcaBuffer);
+    barcodeText = upcaBuffer;
+  }
   int sum = 0;
   int textLength = strnlen(barcodeText, 20);
   int remainderForMultiplication = 0;
@@ -206,6 +214,30 @@ bool BarcodeChecker::validateChecksum(const char *barcodeText, BarcodeType type)
   int lastDigit = barcodeText[textLength-1] - '0';
 
   return checksum == lastDigit;
+}
+
+void BarcodeChecker::expandToUPCA(const char* upce, char* upcaBuffer) {
+  char lastDigit = upce[6] - '0'; // last digit before checksum
+  if (lastDigit <= 2) {
+    sprintf(upcaBuffer, "%c%c%c%c0000%c%c%c%c",
+      upce[0], upce[1], upce[2], upce[6], upce[3], upce[4], upce[5], upce[7]
+    );
+  }
+  else if (lastDigit == 3) {
+    sprintf(upcaBuffer, "%c%c%c%c00000%c%c%c",
+      upce[0], upce[1], upce[2], upce[3], upce[4], upce[5], upce[7]
+    );
+  }
+  else if (lastDigit == 4) {
+    sprintf(upcaBuffer, "%c%c%c%c%c00000%c%c",
+      upce[0], upce[1], upce[2], upce[3], upce[4], upce[5], upce[7]
+    );
+  }
+  else {
+    sprintf(upcaBuffer, "%c%c%c%c%c%c0000%c%c",
+      upce[0], upce[1], upce[2], upce[3], upce[4], upce[5], upce[6], upce[7]
+    );
+  }
 }
 
 /////////////////////////////////////////////////
